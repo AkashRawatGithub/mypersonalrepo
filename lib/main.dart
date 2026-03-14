@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mytestingapp/RandomGC/randomBloc/random_bloc.dart';
+import 'package:mytestingapp/cameraCapture/cameraBloc/camera_bloc.dart';
 import 'package:mytestingapp/counterApp/counterBloc/counter_bloc.dart';
 import 'package:mytestingapp/routes/app_routes.dart';
 import 'package:mytestingapp/routes/route_generator.dart';
+import 'package:mytestingapp/utils/image_picker_utils.dart';
 import 'core/constants/app_theme.dart';
 
 void main() {
@@ -14,21 +17,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => CounterBloc(),
+        ),
+        BlocProvider(
+          create: (context) => RandomBloc(),
+        ),
+     BlocProvider(
+          create: (context) => CameraBloc(ImagePickerUtils()),
+        ),
+      ],
+      child: MaterialApp(
 
-    return BlocProvider(
-      create: (_)=>CounterBloc(),
-    child: MaterialApp(
+        debugShowCheckedModeBanner: false,
 
-      debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
 
-      theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
 
-      darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.system,
+        initialRoute: AppRoutes.counterScreen,
 
-      themeMode: ThemeMode.system,
-      initialRoute: AppRoutes.CounterScreen,
-
-      onGenerateRoute: RouteGenerator.generateRoute,
-    ),);
+        onGenerateRoute: RouteGenerator.generateRoute,
+      ),
+    );
   }
 }
